@@ -1,0 +1,4 @@
+Compile the gameserver and simple client with ./build
+Run the gameserver with java -jar DC4Server.jar
+Run the sample client with ./sampleclient [-c color] [-p port] serverhost
+(you will need to run two such clients on different machines to test an actual game interaction)

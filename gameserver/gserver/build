@@ -1,0 +1,4 @@
+javac DC4Server.java
+jar cfe DC4Server.jar DC4Server *.class
+rm *.class
+gcc -o samplecient test.c

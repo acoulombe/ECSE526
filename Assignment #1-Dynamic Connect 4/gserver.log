@@ -1,0 +1,68 @@
+alex@alex-Inspiron-5577:~/Documents/Github/ECSE526-[18:30:55]$[master ?] /usr/bin/python3 -i "/home/alex/Documents/Github/ECSE526/Assignment #1-Dynamic Connect 4/gserver_sock.py"
+>>> g = gserver("localhost", 12345)
+>>> g.Connect("mytestgame", "black")
+True
+>>> g.Send("21N")
+>>> g.Connect("mytestgame", "black")
+True
+>>> g.Send("21N")
+>>> g.Send("21N")
+>>> g.Send("21N")
+>>> g.Send("21N")
+>>> g.Receive()
+'mytestgame black\n33S\n21N\n12S\n21N\n51S\n21N\n33S\n21N\n44E\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'Timeout of 10000 ms triggered: Game over.\n'
+>>> g.Connect("mytestgame", "black")
+True
+>>> g.Send("21N")
+>>> g.Receive()
+'mytestgame black\n33S\n21N\n12S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n51S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n33S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n44E\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n21S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n21S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n54E\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n33E\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n14S\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n33E\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n32N\n'
+>>> g.Send("21N")
+>>> g.Receive()
+'21N\n21S\n'
+>>> exit()
+alex@alex-Inspiron-5577:~/Documents/Github/ECSE526-[18:34:27]$[master ?] /usr/bin/python3 -i "/home/alex/Documents/Github/ECSE526/Assignment #1-Dynamic Connect 4/gserver_sock.py"
+>>> g.Connect("mytestgame", "black")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'g' is not defined
+>>> g = gserver("localhost", "black")
+>>> g = gserver("localhost", 12345)
+>>> g.Connect("mytestgame", "black")
+True
+>>> g.Receive()
+'mytestgame black\n33S\n'
+>>> g.Receive()
+'Timeout of 10000 ms triggered: Game over.\n'
