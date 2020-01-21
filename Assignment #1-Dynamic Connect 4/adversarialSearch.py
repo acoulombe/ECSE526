@@ -2,7 +2,7 @@ import Dynamic_Connect4
 
 ai_player = None    # either black or white
 
-def MiniMax(state, depth_left, max_player):
+def MiniMax(move, state, depth_left, max_player):
     """MiniMax-Decision algorithm for finding the action 
     corresponding to the move that leads to the outcome 
     with the best utility, under the assumption that the
@@ -10,6 +10,8 @@ def MiniMax(state, depth_left, max_player):
 
     Parameters
     --------
+        move: str
+            move that generated state
         state: list(list(str))
             2D matrix representing the game state
         depth_left: int 
@@ -24,14 +26,14 @@ def MiniMax(state, depth_left, max_player):
         value: float
             heuristic value of the best action
     """
-    if depth_left == 0 or isTerminal():
-        return heuristic()
+    if depth_left == 0 or isTerminal(state):
+        return move, heuristic(state)
     if max_player:
         value = -float('Inf')
         possibleMoves, possibleStates = newStates(state, max_player)
         bestMove = None
         for i in range(0, len(possibleStates)):
-            action, alt_val = MiniMax(possibleStates[i], depth_left-1, False)
+            action, alt_val = MiniMax(possibleMoves[i], possibleStates[i], depth_left-1, False)
             if alt_val > value:
                 value = alt_val
                 bestMove = possibleMoves[i]
@@ -42,10 +44,66 @@ def MiniMax(state, depth_left, max_player):
         possibleMoves, possibleStates = newStates(state, max_player)
         bestMove = None
         for i in range(0,len(possibleStates)):
-            action, alt_val = MiniMax(possibleStates[i], depth_left-1, True)
+            action, alt_val = MiniMax(possibleMoves[i], possibleStates[i], depth_left-1, True)
             if alt_val < value:
                 value = alt_val
                 bestMove = possibleMoves[i]
+        return bestMove, value
+
+def AlphaBetaPruning(move, state, depth_left, alpha, beta, max_player):
+    """MiniMax-Decision algorithm for finding the action 
+    corresponding to the move that leads to the outcome 
+    with the best utility, under the assumption that the
+    opponent plays to minimize utility.
+
+    Parameters
+    --------
+        move: str
+            move that generated state
+        state: list(list(str))
+            2D matrix representing the game state
+        depth_left: int 
+            remaining depth of the search that can still be done
+        alpha: int
+            best value seen for maximizing player
+        beta: int
+            best value seen for the minimizing player
+        max_player: bool
+            indicates whether it's our turn (max) or opponent's turn (min)
+
+    Returns
+    --------
+        action: str
+            best action to perform
+        value: float
+            heuristic value of the best action
+    """
+    if depth_left == 0 or isTerminal(state):
+        return move, heuristic(state)
+    if max_player:
+        value = -float('Inf')
+        possibleMoves, possibleStates = newStates(state, max_player)
+        bestMove = None
+        for i in range(0, len(possibleStates)):
+            action, alt_val = AlphaBetaPruning(possibleMoves[i], possibleStates[i], depth_left-1, alpha, beta, False)
+            if alt_val > value:
+                value = alt_val
+                bestMove = possibleMoves[i]
+            alpha = max(alpha, alt_val)
+            if beta <= alpha:
+                break
+        return bestMove, value
+
+    else:   #min player
+        value = float('Inf')
+        possibleMoves, possibleStates = newStates(state, max_player)
+        bestMove = None
+        for i in range(0,len(possibleStates)):
+            action, alt_val = AlphaBetaPruning(possibleMoves[i], possibleStates[i], depth_left-1, alpha, beta, True)
+            if alt_val < value:
+                value = alt_val
+                bestMove = possibleMoves[i]
+            beta = min(beta, alt_val)
         return bestMove, value
 
 def newStates(state, max_player):
@@ -90,12 +148,168 @@ def newStates(state, max_player):
                 if y>0 and state[y-1][x]==' ':
                     possibleMoves.append(f"{x+1}{y+1}N")
     for move in possibleMoves:
-        possibleStates.append(Dynamic_Connect4.playMove(state, move, True))
+        possibleStates.append(Dynamic_Connect4.playMove(state, move, False))
     
     return possibleMoves, possibleStates
 
-def isTerminal():
-    pass
+def isTerminal(state):
+    """Checks whether a player has aligned 4 pieces
+    
+    Parameters
+    --------
+        state: list(list(str))
+            game state being verified
+    Returns
+    --------
+        bool
+            is game state terminal
+    """
+    for y in range(0, len(state)):
+        for x in range(0,len(state[0])):
+            for player in ['X','O']:
+                #Check if horizontal line is formed
+                if(
+                    x<4 and         #Don't need to check further (doesn't fit)
+                    state[y][x] == player and
+                    state[y][x+1]==player and
+                    state[y][x+2]==player and
+                    state[y][x+3]==player
+                ):
+                    return True
 
-def heuristic():
-    pass
+                #Check if vertical line is formed
+                if(
+                    y<4 and         #Don't need to check further (doesn't fit)
+                    state[y][x] == player and
+                    state[y+1][x]==player and
+                    state[y+2][x]==player and
+                    state[y+3][x]==player
+                ):
+                    return True
+                
+                #Check if diagonal line is formed
+                if(
+                    x<4 and y<4 and #Don't need to check further (doesn't fit)
+                    state[y][x]  ==  player and
+                    state[y+1][x+1]==player and
+                    state[y+2][x+2]==player and
+                    state[y+3][x+3]==player
+                ):
+                    return True
+    return False
+
+def heuristic(state):
+    """Ranks alternatives in search algorithms at each
+    branching step based on available information to 
+    decide which branch to follow
+
+    heuristic based on:
+        - how many of your pieces are aligned (+1 for each piece around a piece)
+        - how many of the opponent pieces are aligned (-1 for each piece around a piece)
+
+    Parameters
+    --------
+        state: list(list(str))
+            state of the game being evaluated
+    
+    Returns
+    --------
+        int
+            value of the estimated utility of the state
+    """
+    white_score = 0
+    black_score = 0
+    for y in range(0, len(state)):
+        for x in range(0,len(state[0])):
+            if(state[y][x]=='O'):
+                #Check for pieces nearby of same color
+                if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
+                    white_score = white_score+1
+                if(x>0 and state[y][x]==state[y][x-1]):
+                    white_score = white_score+1
+                if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
+                    white_score = white_score+1
+                if(y>0 and state[y][x]==state[y-1][x]):
+                    white_score = white_score+1
+                if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
+                    white_score = white_score+1
+                if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
+                    white_score = white_score+1
+                if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
+                    white_score = white_score+1
+                if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
+                    white_score = white_score+1
+                
+                #Check for alignment
+                #Check if horizontal line is formed
+                if(x<(len(state[0])-1) and state[y][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
+                            white_score = white_score+10
+                        white_score = white_score+5
+                    white_score = white_score+3
+                
+                #Check if vertical line is formed
+                if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
+                    if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
+                        if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
+                            white_score = white_score+10
+                        white_score = white_score+5
+                    white_score = white_score+3
+                
+                #Check if diagonal line is formed
+                if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
+                            white_score = white_score+10
+                        white_score = white_score+5
+                    white_score = white_score+3
+
+            elif(state[y][x]=='X'):
+                #Check for pieces nearby of same color
+                if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
+                    black_score = black_score+1
+                if(x>0 and state[y][x]==state[y][x-1]):
+                    black_score = black_score+1
+                if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
+                    black_score = black_score+1
+                if(y>0 and state[y][x]==state[y-1][x]):
+                    black_score = black_score+1
+                if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
+                    black_score = black_score+1
+                if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
+                    black_score = black_score+1
+                if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
+                    black_score = black_score+1
+                if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
+                    black_score = black_score+1
+                
+                #Check for alignment
+                #Check if horizontal line is formed
+                if(x<(len(state[0])-1) and state[y][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
+                            black_score = black_score+10
+                        black_score = black_score+5
+                    black_score = black_score+3
+                
+                #Check if vertical line is formed
+                if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
+                    if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
+                        if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
+                            black_score = black_score+10
+                        black_score = black_score+5
+                    black_score = black_score+3
+                
+                #Check if diagonal line is formed
+                if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
+                            black_score = black_score+10
+                        black_score = black_score+5
+                    black_score = black_score+3
+                
+    if(ai_player == 'white'):
+        return white_score - black_score
+    else:
+        return black_score- white_score
