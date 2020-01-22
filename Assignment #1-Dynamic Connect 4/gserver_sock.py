@@ -14,7 +14,7 @@ class gserver():
             socket connecting to the game server
     """
 
-    TIMEOUT_msg = 'Timeout of 10000 ms triggered: Game over.'
+    TIMEOUT_msg = 'Timeout'
 
     def __init__(self, address, port):
         """Constructor for the game server class
@@ -60,8 +60,6 @@ class gserver():
             request = f"{gameID} {player}"
             self.Send(request)
             answer = self.Receive()
-            print(answer)
-            print(request)
             if(request==answer[0]):
                 return True
             else:
@@ -92,6 +90,11 @@ class gserver():
     def Receive(self):
         """Receives data from the game server
 
+        Raises
+        --------
+            TimeoutError
+                Exception for reaching the timeout of the game server
+
         Returns
         --------
             ans_list: list of game states received from game server
@@ -101,8 +104,9 @@ class gserver():
             ans_list = answer.split('\n')
             ans_list.pop(-1)
             for ans in ans_list:
-                if(ans == self.TIMEOUT_msg):
-                    print('Timeout of 10000 ms triggered: Game over.')
-                    self.Disconnect()      
+                if(self.TIMEOUT_msg in ans):
+                    print(ans)
+                    self.Disconnect() 
+                    raise TimeoutError     
             return ans_list
         
