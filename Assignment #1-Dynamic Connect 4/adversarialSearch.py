@@ -242,23 +242,6 @@ def heuristic(state):
         for x in range(0,len(state[0])):
             if(state[y][x]=='O'):
                 white_score = white_score + position_val[y][x]
-                # #Check for pieces nearby of same color
-                # if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
-                #     white_score = white_score+1
-                # if(x>0 and state[y][x]==state[y][x-1]):
-                #     white_score = white_score+1
-                # if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
-                #     white_score = white_score+1
-                # if(y>0 and state[y][x]==state[y-1][x]):
-                #     white_score = white_score+1
-                # if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
-                #     white_score = white_score+1
-                # if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
-                #     white_score = white_score+1
-                # if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
-                #     white_score = white_score+1
-                # if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
-                #     white_score = white_score+1
                 
                 #Check for alignment
                 #Check if horizontal line is formed
@@ -295,23 +278,6 @@ def heuristic(state):
 
             elif(state[y][x]=='X'):
                 black_score = black_score + position_val[y][x]
-                # #Check for pieces nearby of same color
-                # if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
-                #     black_score = black_score+1
-                # if(x>0 and state[y][x]==state[y][x-1]):
-                #     black_score = black_score+1
-                # if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
-                #     black_score = black_score+1
-                # if(y>0 and state[y][x]==state[y-1][x]):
-                #     black_score = black_score+1
-                # if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
-                #     black_score = black_score+1
-                # if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
-                #     black_score = black_score+1
-                # if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
-                #     black_score = black_score+1
-                # if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
-                #     black_score = black_score+1
                 
                 #Check for alignment
                 #Check if horizontal line is formed
