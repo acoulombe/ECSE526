@@ -169,7 +169,7 @@ def isTerminal(state):
             for player in ['X','O']:
                 #Check if horizontal line is formed
                 if(
-                    x<4 and         #Don't need to check further (doesn't fit)
+                    x<=3 and         #Don't need to check further (doesn't fit)
                     state[y][x] == player and
                     state[y][x+1]==player and
                     state[y][x+2]==player and
@@ -179,7 +179,7 @@ def isTerminal(state):
 
                 #Check if vertical line is formed
                 if(
-                    y<4 and         #Don't need to check further (doesn't fit)
+                    y<=3 and         #Don't need to check further (doesn't fit)
                     state[y][x] == player and
                     state[y+1][x]==player and
                     state[y+2][x]==player and
@@ -189,14 +189,33 @@ def isTerminal(state):
                 
                 #Check if diagonal line is formed
                 if(
-                    x<4 and y<4 and #Don't need to check further (doesn't fit)
+                    x<=3 and y<=3 and #Don't need to check further (doesn't fit)
                     state[y][x]  ==  player and
                     state[y+1][x+1]==player and
                     state[y+2][x+2]==player and
                     state[y+3][x+3]==player
                 ):
                     return True
+
+                if(
+                    x<=3 and y>=3 and #Don't need to check further (doesn't fit)
+                    state[y][x]  ==  player and
+                    state[y-1][x+1]==player and
+                    state[y-2][x+2]==player and
+                    state[y-3][x+3]==player
+                ):
+                    return True
     return False
+
+position_val=[
+[0,0,0,0,0,0,0],
+[0,1,1,1,1,1,0],
+[0,1,2,2,2,1,0],
+[0,1,2,3,2,1,0],
+[0,1,2,2,2,1,0],
+[0,1,1,1,1,1,0],
+[0,0,0,0,0,0,0]
+]
 
 def heuristic(state):
     """Ranks alternatives in search algorithms at each
@@ -222,23 +241,24 @@ def heuristic(state):
     for y in range(0, len(state)):
         for x in range(0,len(state[0])):
             if(state[y][x]=='O'):
-                #Check for pieces nearby of same color
-                if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
-                    white_score = white_score+1
-                if(x>0 and state[y][x]==state[y][x-1]):
-                    white_score = white_score+1
-                if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
-                    white_score = white_score+1
-                if(y>0 and state[y][x]==state[y-1][x]):
-                    white_score = white_score+1
-                if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
-                    white_score = white_score+1
-                if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
-                    white_score = white_score+1
-                if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
-                    white_score = white_score+1
-                if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
-                    white_score = white_score+1
+                white_score = white_score + position_val[y][x]
+                # #Check for pieces nearby of same color
+                # if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
+                #     white_score = white_score+1
+                # if(x>0 and state[y][x]==state[y][x-1]):
+                #     white_score = white_score+1
+                # if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
+                #     white_score = white_score+1
+                # if(y>0 and state[y][x]==state[y-1][x]):
+                #     white_score = white_score+1
+                # if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
+                #     white_score = white_score+1
+                # if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
+                #     white_score = white_score+1
+                # if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
+                #     white_score = white_score+1
+                # if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
+                #     white_score = white_score+1
                 
                 #Check for alignment
                 #Check if horizontal line is formed
@@ -246,43 +266,52 @@ def heuristic(state):
                     if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
                             white_score = white_score+10
-                        white_score = white_score+5
-                    white_score = white_score+3
+                        white_score = white_score+2
+                    white_score = white_score+1
                 
                 #Check if vertical line is formed
                 if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
                     if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
                         if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
                             white_score = white_score+10
-                        white_score = white_score+5
-                    white_score = white_score+3
+                        white_score = white_score+2
+                    white_score = white_score+1
                 
                 #Check if diagonal line is formed
                 if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
                             white_score = white_score+10
-                        white_score = white_score+5
-                    white_score = white_score+3
+                        white_score = white_score+2
+                    white_score = white_score+1
+
+                if(x<(len(state[0])-1) and y>1 and state[y-1][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and y>2 and state[y-2][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and y>3 and state[y-3][x+3]==state[y][x]):
+                            white_score = white_score+10
+                        white_score = white_score+2
+                    white_score = white_score+1
+
 
             elif(state[y][x]=='X'):
-                #Check for pieces nearby of same color
-                if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
-                    black_score = black_score+1
-                if(x>0 and state[y][x]==state[y][x-1]):
-                    black_score = black_score+1
-                if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
-                    black_score = black_score+1
-                if(y>0 and state[y][x]==state[y-1][x]):
-                    black_score = black_score+1
-                if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
-                    black_score = black_score+1
-                if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
-                    black_score = black_score+1
-                if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
-                    black_score = black_score+1
-                if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
-                    black_score = black_score+1
+                black_score = black_score + position_val[y][x]
+                # #Check for pieces nearby of same color
+                # if(x>0 and y>0 and state[y][x]==state[y-1][x-1]):
+                #     black_score = black_score+1
+                # if(x>0 and state[y][x]==state[y][x-1]):
+                #     black_score = black_score+1
+                # if(y<(len(state)-1) and x>0 and state[y][x]==state[y+1][x-1]):
+                #     black_score = black_score+1
+                # if(y>0 and state[y][x]==state[y-1][x]):
+                #     black_score = black_score+1
+                # if(y<(len(state)-1) and state[y][x]==state[y+1][x]):
+                #     black_score = black_score+1
+                # if(y>0 and x<(len(state[0])-1) and state[y][x]==state[y-1][x+1]):
+                #     black_score = black_score+1
+                # if(x<(len(state[0])-1) and state[y][x]==state[y][x+1]):
+                #     black_score = black_score+1
+                # if(y<(len(state)-1) and x<(len(state[0])-1) and state[y][x]==state[y+1][x+1]):
+                #     black_score = black_score+1
                 
                 #Check for alignment
                 #Check if horizontal line is formed
@@ -290,24 +319,31 @@ def heuristic(state):
                     if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
                             black_score = black_score+10
-                        black_score = black_score+5
-                    black_score = black_score+3
+                        black_score = black_score+2
+                    black_score = black_score+1
                 
                 #Check if vertical line is formed
                 if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
                     if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
                         if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
                             black_score = black_score+10
-                        black_score = black_score+5
-                    black_score = black_score+3
+                        black_score = black_score+2
+                    black_score = black_score+1
                 
                 #Check if diagonal line is formed
                 if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
                             black_score = black_score+10
-                        black_score = black_score+5
-                    black_score = black_score+3
+                        black_score = black_score+2
+                    black_score = black_score+1
+
+                if(x<(len(state[0])-1) and y>1 and state[y-1][x+1]==state[y][x]):
+                    if(x<(len(state[0])-2) and y>2 and state[y-2][x+2]==state[y][x]):
+                        if(x<(len(state[0])-3) and y>3 and state[y-3][x+3]==state[y][x]):
+                            black_score = black_score+10
+                        black_score = black_score+2
+                    black_score = black_score+1
                 
     if(ai_player == 'white'):
         return white_score - black_score
