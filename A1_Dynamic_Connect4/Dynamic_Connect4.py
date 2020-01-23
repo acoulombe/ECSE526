@@ -80,7 +80,9 @@ def playMove(curr_game_env, move, display):
     game_env[new_y][new_x]=game_env[old_y][old_x]
     game_env[old_y][old_x]=' '    
     if display:
+        print('  1,2,3,4,5,6,7')
         for y_idx in range(0, len(game_env)):
+            print(y_idx+1, end=' ')
             for x_idx in range(0, len(game_env[0])):
                 print(game_env[y_idx][x_idx], end='')
                 if(x_idx==len(game_env[0])-1):

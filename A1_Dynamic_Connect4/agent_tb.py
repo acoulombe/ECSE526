@@ -17,6 +17,7 @@ if __name__ == "__main__":
     player_turn = 'white'
 
     import time
+    quitGame = False
     
     while not adversarialSearch.isTerminal(current_game_env):
         if(player_turn == adversarialSearch.ai_player):
@@ -26,7 +27,21 @@ if __name__ == "__main__":
             print(time.time()-start_time)
             nextMove = action
         else:
-            nextMove = input('Enter move:')
+            while True:
+                try:
+                    nextMove = input('Enter move:')
+                    if(nextMove in "Qq"):
+                        quitGame = True
+                        break
+                    x = int(nextMove[0])
+                    y = int(nextMove[1])
+                    if(nextMove[2] in 'NnEeSsWw'):
+                        break
+                except:
+                    print("Invalid Move!")
+                    continue
+            if(quitGame):
+                exit(0)
 
         current_game_env = Dynamic_Connect4.playMove(current_game_env, nextMove, True)
         if(player_turn == 'white'):

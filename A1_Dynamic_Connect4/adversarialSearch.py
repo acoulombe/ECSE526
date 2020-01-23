@@ -233,7 +233,7 @@ def heuristic(state):
     
     Returns
     --------
-        int
+        float
             value of the estimated utility of the state
     """
     white_score = 0
@@ -248,7 +248,7 @@ def heuristic(state):
                 if(x<(len(state[0])-1) and state[y][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
-                            white_score = white_score+10
+                            white_score = white_score+1000
                         white_score = white_score+2
                     white_score = white_score+1
                 
@@ -256,7 +256,7 @@ def heuristic(state):
                 if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
                     if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
                         if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
-                            white_score = white_score+10
+                            white_score = white_score+1000
                         white_score = white_score+2
                     white_score = white_score+1
                 
@@ -264,14 +264,14 @@ def heuristic(state):
                 if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
-                            white_score = white_score+10
+                            white_score = white_score+1000
                         white_score = white_score+2
                     white_score = white_score+1
 
                 if(x<(len(state[0])-1) and y>1 and state[y-1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y>2 and state[y-2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y>3 and state[y-3][x+3]==state[y][x]):
-                            white_score = white_score+10
+                            white_score = white_score+1000
                         white_score = white_score+2
                     white_score = white_score+1
 
@@ -284,7 +284,7 @@ def heuristic(state):
                 if(x<(len(state[0])-1) and state[y][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and state[y][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and state[y][x+3]==state[y][x]):
-                            black_score = black_score+10
+                            black_score = black_score+1000
                         black_score = black_score+2
                     black_score = black_score+1
                 
@@ -292,7 +292,7 @@ def heuristic(state):
                 if(y<(len(state)-1) and state[y+1][x]==state[y][x]):
                     if(y<(len(state)-2) and state[y+2][x]==state[y][x]):
                         if(y<(len(state)-3) and state[y+3][x]==state[y][x]):
-                            black_score = black_score+10
+                            black_score = black_score+1000
                         black_score = black_score+2
                     black_score = black_score+1
                 
@@ -300,14 +300,14 @@ def heuristic(state):
                 if(x<(len(state[0])-1) and y<(len(state)-1) and state[y+1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y<(len(state)-2) and state[y+2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y<(len(state)-3) and state[y+3][x+3]==state[y][x]):
-                            black_score = black_score+10
+                            black_score = black_score+1000
                         black_score = black_score+2
                     black_score = black_score+1
 
                 if(x<(len(state[0])-1) and y>1 and state[y-1][x+1]==state[y][x]):
                     if(x<(len(state[0])-2) and y>2 and state[y-2][x+2]==state[y][x]):
                         if(x<(len(state[0])-3) and y>3 and state[y-3][x+3]==state[y][x]):
-                            black_score = black_score+10
+                            black_score = black_score+1000
                         black_score = black_score+2
                     black_score = black_score+1
                 
