@@ -225,6 +225,7 @@ def heuristic(state):
     heuristic based on:
         - how many of your pieces are aligned (+1 for each piece around a piece)
         - how many of the opponent pieces are aligned (-1 for each piece around a piece)
+        - how much dominance do you have on the field
 
     Parameters
     --------
