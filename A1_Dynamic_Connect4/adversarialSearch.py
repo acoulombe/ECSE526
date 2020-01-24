@@ -1,6 +1,8 @@
 import Dynamic_Connect4
 
 ai_player = None    # either black or white
+depth_reached = 0
+nodes_eval = 0
 
 def MiniMax(move, state, depth_left, max_player):
     """MiniMax-Decision algorithm for finding the action 
@@ -78,7 +80,11 @@ def AlphaBetaPruning(move, state, depth_left, alpha, beta, max_player):
         value: float
             heuristic value of the best action
     """
+    global nodes_eval           # REMOVE FOR TOURNAMENT
+    global depth_reached        # REMOVE FOR TOURNAMENT
+    nodes_eval = nodes_eval+1   # REMOVE FOR TOURNAMENT
     if depth_left == 0 or isTerminal(state):
+        depth_reached = depth_left  # REMOVE FOR TOURNAMENT
         return move, heuristic(state)
     if max_player:
         value = -float('Inf')

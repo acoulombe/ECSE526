@@ -1,0 +1,624 @@
+Player : white		Time : 0.8517355918884277 secondes
+Move : 72W
+  1,2,3,4,5,6,7
+1  , , , , , ,X
+2 X, , , , ,O, 
+3 O, , , , , ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 1.6080906391143799 secondes
+Move : 71S		Value : 0
+Depth : 5		Nodes : 11220
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2 X, , , , ,O,X
+3 O, , , , , ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 0.8711280822753906 secondes
+Move : 62W
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2 X, , , ,O, ,X
+3 O, , , , , ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 1.1496288776397705 secondes
+Move : 12E		Value : 1
+Depth : 5		Nodes : 8027
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  ,X, , ,O, ,X
+3 O, , , , , ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 1.6924138069152832 secondes
+Move : 52S
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  ,X, , , , ,X
+3 O, , , ,O, ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 1.4333159923553467 secondes
+Move : 22S		Value : 1
+Depth : 5		Nodes : 9237
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , , ,X
+3 O,X, , ,O, ,X
+4 X, , , , , ,O
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 1.4091365337371826 secondes
+Move : 74W
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , , ,X
+3 O,X, , ,O, ,X
+4 X, , , , ,O, 
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 2.8698437213897705 secondes
+Move : 23E		Value : 1
+Depth : 5		Nodes : 21835
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , , ,X
+3 O, ,X, ,O, ,X
+4 X, , , , ,O, 
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 3.9260149002075195 secondes
+Move : 13E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , , ,X
+3  ,O,X, ,O, ,X
+4 X, , , , ,O, 
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 3.695864200592041 secondes
+Move : 14E		Value : 1
+Depth : 5		Nodes : 26742
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , , ,X
+3  ,O,X, ,O, ,X
+4  ,X, , , ,O, 
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 4.912805795669556 secondes
+Move : 23N
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  ,O, , , , ,X
+3  , ,X, ,O, ,X
+4  ,X, , , ,O, 
+5 O, , , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 4.555186748504639 secondes
+Move : 24S		Value : 3
+Depth : 5		Nodes : 26668
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  ,O, , , , ,X
+3  , ,X, ,O, ,X
+4  , , , , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 3.6322996616363525 secondes
+Move : 22E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,O, , , ,X
+3  , ,X, ,O, ,X
+4  , , , , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 3.2476673126220703 secondes
+Move : 33S		Value : 2
+Depth : 5		Nodes : 18876
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,O, , , ,X
+3  , , , ,O, ,X
+4  , ,X, , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 4.4986512660980225 secondes
+Move : 32E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,O, , ,X
+3  , , , ,O, ,X
+4  , ,X, , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 8.693257093429565 secondes
+Move : 72W		Value : 1
+Depth : 5		Nodes : 61241
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,O, ,X, 
+3  , , , ,O, ,X
+4  , ,X, , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 5.259695768356323 secondes
+Move : 42S
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , ,X, 
+3  , , ,O,O, ,X
+4  , ,X, , ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 7.9851977825164795 secondes
+Move : 34E		Value : 0
+Depth : 5		Nodes : 51477
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , ,X, 
+3  , , ,O,O, ,X
+4  , , ,X, ,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 6.2772088050842285 secondes
+Move : 53S
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , ,X, 
+3  , , ,O, , ,X
+4  , , ,X,O,O, 
+5 O,X, , , , ,X
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : black		Time : 3.6291344165802 secondes
+Move : 75W		Value : 2
+Depth : 5		Nodes : 30441
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , ,X, 
+3  , , ,O, , ,X
+4  , , ,X,O,O, 
+5 O,X, , , ,X, 
+6 X, , , , , ,O
+7 O, , , , , , 
+
+
+Player : white		Time : 5.009511470794678 secondes
+Move : 76N
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , , ,X, 
+3  , , ,O, , ,X
+4  , , ,X,O,O, 
+5 O,X, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 3.677656888961792 secondes
+Move : 62W		Value : -1
+Depth : 5		Nodes : 26782
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , ,X, , 
+3  , , ,O, , ,X
+4  , , ,X,O,O, 
+5 O,X, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 2.6195731163024902 secondes
+Move : 54N
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , , ,X, , 
+3  , , ,O,O, ,X
+4  , , ,X, ,O, 
+5 O,X, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 3.621039628982544 secondes
+Move : 52W		Value : 1
+Depth : 5		Nodes : 21212
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  , , ,X, ,O, 
+5 O,X, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 3.701342821121216 secondes
+Move : 15N
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4 O, , ,X, ,O, 
+5  ,X, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 7.055328130722046 secondes
+Move : 25E		Value : 1
+Depth : 5		Nodes : 40163
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4 O, , ,X, ,O, 
+5  , ,X, , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 5.973450183868408 secondes
+Move : 14E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  ,O, ,X, ,O, 
+5  , ,X, , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 7.972570896148682 secondes
+Move : 35N		Value : 1
+Depth : 5		Nodes : 47919
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  ,O,X,X, ,O, 
+5  , , , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 4.763556718826294 secondes
+Move : 24S
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  , ,X,X, ,O, 
+5  ,O, , , ,X,O
+6 X, , , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 6.046119689941406 secondes
+Move : 16E		Value : 2
+Depth : 5		Nodes : 38011
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  , ,X,X, ,O, 
+5  ,O, , , ,X,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 6.024629354476929 secondes
+Move : 25E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O, ,X
+4  , ,X,X, ,O, 
+5  , ,O, , ,X,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 5.346438407897949 secondes
+Move : 73W		Value : 3
+Depth : 5		Nodes : 30289
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O,X, 
+4  , ,X,X, ,O, 
+5  , ,O, , ,X,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 5.2108612060546875 secondes
+Move : 35E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O,X, 
+4  , ,X,X, ,O, 
+5  , , ,O, ,X,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 6.029952764511108 secondes
+Move : 65W		Value : 1
+Depth : 5		Nodes : 38479
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O,X, 
+4  , ,X,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 6.483317852020264 secondes
+Move : 64W
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , , ,O,O,X, 
+4  , ,X,X,O, , 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 3.963806629180908 secondes
+Move : 34N		Value : 6
+Depth : 5		Nodes : 24796
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , ,X,O,O,X, 
+4  , , ,X,O, , 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 2.5328357219696045 secondes
+Move : 54E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, , , 
+3  , ,X,O,O,X, 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : black		Time : 6.78969144821167 secondes
+Move : 63N		Value : 5
+Depth : 5		Nodes : 43032
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, ,X, 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7 O, , , , , , 
+
+
+Player : white		Time : 6.613162517547607 secondes
+Move : 17E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X, ,X, 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7  ,O, , , , , 
+
+
+Player : black		Time : 7.45938515663147 secondes
+Move : 62W		Value : 5
+Depth : 5		Nodes : 43787
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7  ,O, , , , , 
+
+
+Player : white		Time : 4.796538591384888 secondes
+Move : 27E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  ,X, , , , , 
+7  , ,O, , , , 
+
+
+Player : black		Time : 9.039140462875366 secondes
+Move : 26E		Value : 5
+Depth : 5		Nodes : 59969
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  , ,X, , , , 
+7  , ,O, , , , 
+
+
+Player : white		Time : 4.220343589782715 secondes
+Move : 37E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  , ,X, , , , 
+7  , , ,O, , , 
+
+
+Player : black		Time : 7.812088966369629 secondes
+Move : 36E		Value : 1002
+Depth : 5		Nodes : 52316
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X, ,O
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : white		Time : 3.4293065071105957 secondes
+Move : 75W
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , , ,X,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : black		Time : 2.2890899181365967 secondes
+Move : 42W		Value : 1003
+Depth : 5		Nodes : 13689
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,X, ,X, , 
+3  , ,X,O,O, , 
+4  , , ,X, ,O, 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : white		Time : 1.8478434085845947 secondes
+Move : 64W
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,X, ,X, , 
+3  , ,X,O,O, , 
+4  , , ,X,O, , 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : black		Time : 1.8446681499481201 secondes
+Move : 52W		Value : 1003
+Depth : 5		Nodes : 11306
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,X,X, , , 
+3  , ,X,O,O, , 
+4  , , ,X,O, , 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : white		Time : 0.6139662265777588 secondes
+Move : 53E
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  , ,X,X, , , 
+3  , ,X,O, ,O, 
+4  , , ,X,O, , 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+
+
+Player : black		Time : 1.6239488124847412 secondes
+Move : 32W		Value : 1003
+Depth : 3		Nodes : 8728
+  1,2,3,4,5,6,7
+1  , , , , , , 
+2  ,X, ,X, , , 
+3  , ,X,O, ,O, 
+4  , , ,X,O, , 
+5  , , ,O,X,O, 
+6  , , ,X, , , 
+7  , , ,O, , , 
+

@@ -8,6 +8,7 @@ if __name__ == "__main__":
     port = None
     host = None
     gameID = None
+    depth = 5
 
     for idx in range(1, len(sys.argv)):
         if(sys.argv[idx]=='-c'):
@@ -37,16 +38,28 @@ if __name__ == "__main__":
     current_game_env = Dynamic_Connect4.init_env
     player_turn = 'white'
     
+    import time     # REMOVE FOR TOURNAMENT
+
     while not adversarialSearch.isTerminal(current_game_env):
+        start_time = time.time()            # REMOVE FOR TOURNAMENT
         if(player_turn == adversarialSearch.ai_player):
-            action, value = adversarialSearch.AlphaBetaPruning(None, current_game_env, 4, -float('Inf'), float('Inf'), True)
+            adversarialSearch.depth_reached = 0
+            adversarialSearch.nodes_eval = 0
+            action, value = adversarialSearch.AlphaBetaPruning(None, current_game_env, depth, -float('Inf'), float('Inf'), True)
             gserver.Send(action)
 
         try:
             nextMove = (gserver.Receive())[0]
         except TimeoutError:
             exit(0)
-        
+        # REMOVE FOR TOURNAMENT  -------------------------------
+        print(f'Player : {player_turn}\t\tTime : {(time.time()-start_time)} secondes')
+        if(player_turn == adversarialSearch.ai_player):
+            print(f"Move : {action}\t\tValue : {value}")
+            print(f"Depth : {depth - adversarialSearch.depth_reached}\t\tNodes : {adversarialSearch.nodes_eval}")
+        else:
+            print(f"Move : {nextMove}")
+        # ------------------------------------------------------
         current_game_env = Dynamic_Connect4.playMove(current_game_env, nextMove, True)
         if(player_turn == 'white'):
             player_turn = 'black'
