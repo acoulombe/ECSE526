@@ -36,10 +36,11 @@ def MiniMax(move, state, depth_left, max_player):
         return move, heuristic(state)
     if max_player:
         value = -float('Inf')
-        possibleMoves, possibleStates = newStates(state, max_player)
+        possibleMoves = generateMoves(state, max_player)
         bestMove = None
-        for i in range(0, len(possibleStates)):
-            action, alt_val = MiniMax(possibleMoves[i], possibleStates[i], depth_left-1, False)
+        for i in range(0, len(possibleMoves)):
+            new_state = Dynamic_Connect4.playMove(state, possibleMoves[i], False)
+            action, alt_val = MiniMax(possibleMoves[i], new_state, depth_left-1, False)
             if alt_val > value:
                 value = alt_val
                 bestMove = possibleMoves[i]
@@ -47,10 +48,11 @@ def MiniMax(move, state, depth_left, max_player):
 
     else:   #min player
         value = float('Inf')
-        possibleMoves, possibleStates = newStates(state, max_player)
+        possibleMoves = generateMoves(state, max_player)
         bestMove = None
-        for i in range(0,len(possibleStates)):
-            action, alt_val = MiniMax(possibleMoves[i], possibleStates[i], depth_left-1, True)
+        for i in range(0,len(possibleMoves)):
+            new_state = Dynamic_Connect4.playMove(state, possibleMoves[i], False)
+            action, alt_val = MiniMax(possibleMoves[i], new_state, depth_left-1, True)
             if alt_val < value:
                 value = alt_val
                 bestMove = possibleMoves[i]
@@ -92,10 +94,11 @@ def AlphaBetaPruning(move, state, depth_left, alpha, beta, max_player):
         return move, heuristic(state)
     if max_player:
         value = -float('Inf')
-        possibleMoves, possibleStates = newStates(state, max_player)
+        possibleMoves = generateMoves(state, max_player)
         bestMove = None
-        for i in range(0, len(possibleStates)):
-            action, alt_val = AlphaBetaPruning(possibleMoves[i], possibleStates[i], depth_left-1, alpha, beta, False)
+        for i in range(0, len(possibleMoves)):
+            new_state = Dynamic_Connect4.playMove(state, possibleMoves[i], False)
+            action, alt_val = AlphaBetaPruning(possibleMoves[i], new_state, depth_left-1, alpha, beta, False)
             if alt_val > value:
                 value = alt_val
                 bestMove = possibleMoves[i]
@@ -106,19 +109,19 @@ def AlphaBetaPruning(move, state, depth_left, alpha, beta, max_player):
 
     else:   #min player
         value = float('Inf')
-        possibleMoves, possibleStates = newStates(state, max_player)
+        possibleMoves = generateMoves(state, max_player)
         bestMove = None
-        for i in range(0,len(possibleStates)):
-            action, alt_val = AlphaBetaPruning(possibleMoves[i], possibleStates[i], depth_left-1, alpha, beta, True)
+        for i in range(0,len(possibleMoves)):
+            new_state = Dynamic_Connect4.playMove(state, possibleMoves[i], False)
+            action, alt_val = AlphaBetaPruning(possibleMoves[i], new_state, depth_left-1, alpha, beta, True)
             if alt_val < value:
                 value = alt_val
                 bestMove = possibleMoves[i]
             beta = min(beta, alt_val)
         return bestMove, value
 
-def newStates(state, max_player):
-    """Generate list of actions and consequence states that
-    the agent could choose from
+def generateMoves(state, max_player):
+    """Generate list of actions that the agent could choose from
 
     Parameters
     --------
@@ -131,8 +134,6 @@ def newStates(state, max_player):
     --------
         possibleMoves: list(str)
             list of possible moves to play
-        possibleStates: list(list(list(str)))
-            list of game environments associated to moves
     """ 
     player_piece = None
     if(
@@ -144,7 +145,6 @@ def newStates(state, max_player):
         player_piece = 'X'
 
     possibleMoves = []
-    possibleStates = []
 
     for y in range(0, len(state)):
         for x in range(0,len(state[0])):
@@ -157,10 +157,30 @@ def newStates(state, max_player):
                     possibleMoves.append(f"{x+1}{y+1}S")
                 if y>0 and state[y-1][x]==' ':
                     possibleMoves.append(f"{x+1}{y+1}N")
-    for move in possibleMoves:
-        possibleStates.append(Dynamic_Connect4.playMove(state, move, False))
     
-    return possibleMoves, possibleStates
+    # # Sorted by heuristic         # TOO SLOW FOR TOURNAMENT
+    # possibleMoves.sort(key=lambda move: sortHeuristic(move, state),reverse=(ai_player == 'white' and max_player))
+
+    return possibleMoves
+
+def sortHeuristic(move, state):
+    """heuristic function for the move ordering sort
+    Used to sort moves based on the moves that give the best heuristics
+
+    Parameters
+    --------
+        move: str
+            move to be performed
+        state: list(list(str))
+            current game environment
+    
+    Returns
+    --------
+        int
+            heuristic value of the move
+    """
+    new_state = Dynamic_Connect4.playMove(state, move, False)
+    return heuristic(new_state)
 
 def isTerminal(state):
     """Checks whether a player has aligned 4 pieces

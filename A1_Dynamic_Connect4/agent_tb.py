@@ -5,7 +5,7 @@ import sys
 
 if __name__ == "__main__":
 
-    depth = 4
+    depth = 6
 
     for idx in range(1, len(sys.argv)):
         if(sys.argv[idx]=='-c'):
