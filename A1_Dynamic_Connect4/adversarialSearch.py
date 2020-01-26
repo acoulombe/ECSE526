@@ -28,7 +28,11 @@ def MiniMax(move, state, depth_left, max_player):
         value: float
             heuristic value of the best action
     """
+    global nodes_eval           # REMOVE FOR TOURNAMENT
+    global depth_reached        # REMOVE FOR TOURNAMENT
+    nodes_eval = nodes_eval+1   # REMOVE FOR TOURNAMENT
     if depth_left == 0 or isTerminal(state):
+        depth_reached = depth_left  # REMOVE FOR TOURNAMENT
         return move, heuristic(state)
     if max_player:
         value = -float('Inf')
