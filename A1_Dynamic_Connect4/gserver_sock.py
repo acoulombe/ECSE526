@@ -49,8 +49,8 @@ class gserver():
         try:
             self.sock = socket.socket()
             try:
-                self.sock.connect((self.address, self.port))
                 self.sock.settimeout(timeout/1000)
+                self.sock.connect((self.address, self.port))
             except socket.timeout:
                 raise TimeoutError                          
             # Receive confirmation of connection
