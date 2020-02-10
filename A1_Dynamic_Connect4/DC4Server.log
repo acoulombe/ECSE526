@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2020-01-30T04:50:56.435495Z</date>
+  <millis>1580359856435</millis>
+  <nanos>495000</nanos>
+  <sequence>0</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>DC4Server</class>
+  <method>&lt;init&gt;</method>
+  <thread>1</thread>
+  <message>DC4Server on port 12345 with timeout = 10000 ms is up.</message>
+</record>
+<record>
+  <date>2020-01-30T04:51:00.491998Z</date>
+  <millis>1580359860491</millis>
+  <nanos>998000</nanos>
+  <sequence>1</sequence>
+  <logger>global</logger>
+  <level>INFO</level>
+  <class>DC4Server$ClientThread</class>
+  <method>processLine</method>
+  <thread>13</thread>
+  <message>white player of gameID = "mytestgame" is waiting for an opponent...</message>
+</record>
+</log>

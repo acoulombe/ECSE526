@@ -43,17 +43,18 @@ def read_dict_csv(filename):
         data_dict[row[0]] = row[1]
     return data_dict
 
-def write_predict_csv(filename, data_arr):
-    """function for writing the label of the prediction into a csv file
+def write_csv(filename, data_arr):
+    """function for writing data into a csv file
 
     Parameters
     --------
         filename : str
             path to csv file to write data to    
         data_arr : list(list(str))
-            label of the test data set in array form
+           data set in array form
     """
     file = open(filename, 'w')
     csv_writer = csv.writer(file, delimiter=',')
     for row in data_arr:
         csv_writer.writerow(row)
+    file.close()
