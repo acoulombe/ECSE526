@@ -2,9 +2,10 @@ import csv_util
 import probability_util
 
 data_path = 'music-classification/kaggle/'
-test_set_path = data_path + 'test/'
 training_set_path = data_path + 'training/'
 parameter_path = 'parameters/'
+labels_file = "labels.csv"
+
 genre_count = 10
 genre_idx = {
     'rnb' : 0,
@@ -20,16 +21,16 @@ genre_idx = {
 }
 
 genre_param_filename = [
-    'rnb_param.csv',
-    'edm_dance_param.csv',
-    'jazz_param.csv',
-    'latin_param.csv',
-    'pop_param.csv',
-    'kids_param.csv',
-    'classical_param.csv',
-    'rock_param.csv',
-    'country_param.csv',
-    'metal_param.csv'
+    'rnb.csv',
+    'edm_dance.csv',
+    'jazz.csv',
+    'latin.csv',
+    'pop.csv',
+    'kids.csv',
+    'classical.csv',
+    'rock.csv',
+    'country.csv',
+    'metal.csv'
 ]
 
 if __name__ == "__main__":
@@ -37,7 +38,7 @@ if __name__ == "__main__":
     genre_mean = [0]*genre_count
     genre_covariance = [None]*genre_count
 
-    file_labels = csv_util.read_dict_csv(data_path+"labels.csv")
+    file_labels = csv_util.read_dict_csv(data_path+labels_file)
     
     # Build data set by reading all training data features and sorting them by genre
     for training_set in file_labels:
