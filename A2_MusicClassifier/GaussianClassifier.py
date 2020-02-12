@@ -126,6 +126,10 @@ if __name__ == "__main__":
     for (dirpath, dirnames, filenames) in os.walk(test_set_path):
         files.extend(filenames)
 
+    # Make progress tracker
+    max_count = len(files)
+    curr_file_idx = 0
+
     predictions = [['id','category']]
     # Build data set by reading all training data features and sorting them by genre
     for test_set in files:
@@ -135,15 +139,8 @@ if __name__ == "__main__":
         label = predictGenre(features, genre_means, genre_covariances)
         predictions.append([test_set, label])
 
-    csv_util.write_csv('predictions.csv', predictions)
+        # Print Progress
+        curr_file_idx += 1
+        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
 
-    # correct_count = 0
-    # idx = 0
-    # for filename in file_labels:
-    #     if(idx==0): 
-    #         idx = 1
-    #         continue
-    #     if(file_labels[filename] == predictions[idx][1]):
-    #         correct_count +=1
-    #     idx += 1
-    # print(f'{correct_count/len(file_labels)*100}%')
+    csv_util.write_csv('predictions.csv', predictions)

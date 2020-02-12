@@ -39,6 +39,10 @@ if __name__ == "__main__":
     genre_covariance = [None]*genre_count
 
     file_labels = csv_util.read_dict_csv(data_path+labels_file)
+
+    # Make progress tracker
+    max_count = len(file_labels) + genre_count
+    curr_file_idx = 0
     
     # Build data set by reading all training data features and sorting them by genre
     for training_set in file_labels:
@@ -49,9 +53,16 @@ if __name__ == "__main__":
             genre_training_sets[genre_idx[file_labels[training_set]]] = features    # Add features to the right genre
         else:
             genre_training_sets[genre_idx[file_labels[training_set]]] += features    # Add features to the right genre
+        # Print Progress
+        curr_file_idx += 1
+        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
 
     # Compute the means and covariance matrix of each genre and save to csv file
     for idx in range(0, genre_count):
         genre_mean[idx] = probability_util.compute_means(genre_training_sets[idx])
         genre_covariance[idx] = probability_util.compute_covariance(genre_training_sets[idx])
         csv_util.write_csv(parameter_path+genre_param_filename[idx], [genre_mean[idx]]+genre_covariance[idx])
+        
+        # Print Progress
+        curr_file_idx += 1
+        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
