@@ -8,7 +8,8 @@ test_set_path = data_path + 'test/'
 training_set_path = data_path + 'training/'
 labels_file = "labels.csv"
 
-K = 12      # Number of nearest neighbors to use
+K = 11              # Number of nearest neighbors to use
+weight = True       # use weighted K-NN?
 
 def predictGenre(sample_features, labeled_data, labels, k):
     """Predicts the genre of the song using the K-Nearest Neighbors algorithm
@@ -63,7 +64,12 @@ def predictGenre(sample_features, labeled_data, labels, k):
     'metal' : 0
     }
     for p in range(0, k):
-        genre_vote[labels[idx[p]]] += 1
+        if weight: 
+            if(data_matrix[idx[p]]==0):
+                genre_vote[labels[idx[p]]] += float("Inf")
+            else:
+                genre_vote[labels[idx[p]]] += 1/data_matrix[idx[p]]
+        else: genre_vote[labels[idx[p]]] += 1
 
     max_genre = max(genre_vote.keys(), key=(lambda v: genre_vote[v]))
 

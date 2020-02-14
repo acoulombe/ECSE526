@@ -1,11 +1,13 @@
 import csv_util
 import probability_util
 
+# Path to important files
 data_path = 'music-classification/kaggle/'
 training_set_path = data_path + 'training/'
 parameter_path = 'parameters/'
 labels_file = "labels.csv"
 
+# Structure IDs to be used
 genre_count = 10
 genre_idx = {
     'rnb' : 0,

@@ -3,12 +3,13 @@ import probability_util
 import numpy as np
 import os
 
-
+# Paths to important files
 genre_count = 10
 data_path = 'music-classification/kaggle/'
 test_set_path = data_path + 'test/'
 param_path = 'parameters/'
 
+# Structure IDs to be used
 genre_idx = {
     'rnb' : 0,
     'edm_dance' : 1,
@@ -58,6 +59,7 @@ def predictGenre(data_set, means, covariances):
     """
     unll_vector = [None]*genre_count
 
+    # compute UNLL of each song in the data set for each genre
     for idx in range(0, genre_count):
         for feature_vector in data_set:
             if unll_vector[idx] is None:
@@ -66,6 +68,7 @@ def predictGenre(data_set, means, covariances):
                 unll_vector[idx] += [computeUNLL(feature_vector, means[idx], covariances[idx])]
     unll_means = probability_util.compute_means((np.array(unll_vector).T).tolist())
 
+    # find genre with lowest UNLL
     predict_val = float('Inf')
     predict_idx = 0
     for idx in range(0, genre_count):
