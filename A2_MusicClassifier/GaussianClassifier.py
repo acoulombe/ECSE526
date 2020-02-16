@@ -144,6 +144,8 @@ if __name__ == "__main__":
 
         # Print Progress
         curr_file_idx += 1
-        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
+        print('Progress : %{:,.2f}'.format(curr_file_idx/max_count*100), end='\r')
 
+    print(f"Generating file 'predictions.csv'    ", end='\r')
     csv_util.write_csv('predictions.csv', predictions)
+    print(f"Generated file 'predictions.csv'     ")

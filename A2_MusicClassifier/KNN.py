@@ -8,7 +8,7 @@ test_set_path = data_path + 'test/'
 training_set_path = data_path + 'training/'
 labels_file = "labels.csv"
 
-K = 11              # Number of nearest neighbors to use
+K = 13              # Number of nearest neighbors to use
 weight = True       # use weighted K-NN?
 
 def predictGenre(sample_features, labeled_data, labels, k):
@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
         # Print Progress
         curr_file_idx += 1
-        print(f'Loading data set : %{curr_file_idx/max_count*100}', end='\r')
+        print('Loading data: %{:,.2f}'.format(curr_file_idx/max_count*100), end='\r')
 
     # ========================== PREDICTION STAGE =======================================
     # Load data set to predict
@@ -122,6 +122,8 @@ if __name__ == "__main__":
         
         # Print Progress
         curr_file_idx += 1
-        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
+        print('Progress : %{:,.2f}      '.format(curr_file_idx/max_count*100), end='\r')
 
+    print(f"Generating file 'predictions.csv'", end='\r')
     csv_util.write_csv('predictions.csv', predictions)
+    print(f"Generated file 'predictions.csv'")

@@ -57,7 +57,7 @@ if __name__ == "__main__":
             genre_training_sets[genre_idx[file_labels[training_set]]] += features    # Add features to the right genre
         # Print Progress
         curr_file_idx += 1
-        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
+        print('Loading data : %{:,.2f}'.format(curr_file_idx/max_count*100), end='\r')
 
     # Compute the means and covariance matrix of each genre and save to csv file
     for idx in range(0, genre_count):
@@ -67,4 +67,6 @@ if __name__ == "__main__":
         
         # Print Progress
         curr_file_idx += 1
-        print(f'Progress : %{curr_file_idx/max_count*100}', end='\r')
+        print('Computing data: %{:,.2f}'.format(curr_file_idx/max_count*100), end='\r')
+
+    print("    Training Complete!     ")
