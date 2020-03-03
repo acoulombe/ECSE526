@@ -19,7 +19,7 @@ ale.setInt(b'frame_skip', 5)
 # Set USE_SDL to true to display the screen. ALE must be compilied
 # with SDL enabled for this to work. On OSX, pygame init is used to
 # proxy-call SDL_main.
-USE_SDL = False
+USE_SDL = True
 if USE_SDL:
   if sys.platform == 'darwin':
     import pygame
@@ -36,8 +36,43 @@ ale.loadROM(rom_file)
 # Get the list of minimal actions
 legal_actions = ale.getMinimalActionSet()
 
+# Sync agent to ALE
+RL.ale = ale
+
+# Set Agent Parameters
+for idx in range(2, len(sys.argv)):
+  if(sys.argv[idx]=='-a'):
+    try:
+      RL.alpha = float(sys.argv[idx+1])
+    except ValueError:
+      print("Invalid learning rate, must be a float")
+  elif(sys.argv[idx]=='-g'):
+    try:
+      RL.gamma = float(sys.argv[idx+1])
+    except:
+      print("Invalid discount rate, must be a float")
+  elif(sys.argv[idx]=='-e'):
+    try:
+        RL.epsilon = float(sys.argv[idx+1])
+    except:
+      print("Invalid exploration factor, must be a float")
+  elif(sys.argv[idx]=='-x'):
+    try:
+      RL.getQTable(sys.argv[idx+1])
+    except:
+      print("Couldn't locate csv file with prior experience, continuing with no experience")
+
+if(
+  RL.alpha is None or
+  RL.gamma is None or
+  RL.epsilon is None
+):
+  print("Invalid or missing arguments. Usage:\n python3 agent.py -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)]")
+  exit(0)
+
 # Play 10 episodes
-for episode in range(10):
+for episode in range(1000):
+  reward = 0
   total_reward = 0
   while not ale.game_over():
     (screen_width,screen_height) = ale.getScreenDims()
@@ -45,15 +80,16 @@ for episode in range(10):
     ale.getScreen(screen_data)
 
     screen = RL.convertEnv(screen_data)
-    grid = RL.getState(screen)
-    for i in range(14):
-      print(grid[i])
-    print('')
-    exit()
+    state = RL.getState(screen)
 
-    a = legal_actions[randrange(len(legal_actions))]
+    reward += RL.stateReward(state)
+    a = RL.Q_learn(state, reward)
+    if a is None:
+      a = 0
     # Apply an action and get the resulting reward
     reward = ale.act(a)
     total_reward += reward
   print('Episode %d ended with score: %d' % (episode, total_reward))
   ale.reset_game()
+
+RL.saveQTable('Q.csv')

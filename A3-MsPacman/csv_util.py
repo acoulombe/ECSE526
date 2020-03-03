@@ -13,28 +13,25 @@ def read_csv(filename):
         data : list(list(int))
             value of feature data in array form
     """
-    data = []
+    data = {}
     file = open(filename, 'r')
     csv_data = csv.reader(file, delimiter=',')
     for row in csv_data:
-        element = []
-        for i in range(0, len(row)):
-            element.append(int(row[i])) 
-        data.append(element)
+        data[row[0]] = float(row[1]) 
     return data
 
-def write_csv(filename, data_arr):
+def write_csv(filename, data):
     """function for writing data into a csv file
 
     Parameters
     --------
         filename : str
             path to csv file to write data to    
-        data_arr : list(list(str))
+        data_arr : dict(float)
            data set in array form
     """
     file = open(filename, 'w')
     csv_writer = csv.writer(file, delimiter=',')
-    for row in data_arr:
-        csv_writer.writerow(row)
+    for key in data:
+        csv_writer.writerow([key, data[key]])
     file.close()
