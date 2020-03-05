@@ -1,7 +1,7 @@
 import csv
 
 def read_csv(filename):
-    """function for reading the data from a csv file
+    """function for reading the feature data from a csv file
 
     Parameters
     --------
@@ -10,15 +10,18 @@ def read_csv(filename):
     
     Returns
     --------
-        data : list(list(int))
+        feature_arr : list(list(float))
             value of feature data in array form
     """
-    data = {}
+    feature_arr = []
     file = open(filename, 'r')
     csv_data = csv.reader(file, delimiter=',')
     for row in csv_data:
-        data[row[0]] = float(row[1]) 
-    return data
+        features = []
+        for i in range(0, len(row)):
+            features.append(float(row[i])) 
+        feature_arr.append(features)
+    return feature_arr
 
 def write_csv(filename, data):
     """function for writing data into a csv file
@@ -32,6 +35,5 @@ def write_csv(filename, data):
     """
     file = open(filename, 'w')
     csv_writer = csv.writer(file, delimiter=',')
-    for key in data:
-        csv_writer.writerow([key, data[key]])
+    csv_writer.writerow(data)
     file.close()

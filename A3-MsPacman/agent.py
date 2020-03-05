@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-from random import randrange
 from ale_py import ALEInterface
 import numpy as np
 import RL
@@ -36,9 +35,6 @@ ale.loadROM(rom_file)
 # Get the list of minimal actions
 legal_actions = ale.getMinimalActionSet()
 
-# Sync agent to ALE
-RL.ale = ale
-
 # Set Agent Parameters
 for idx in range(2, len(sys.argv)):
   if(sys.argv[idx]=='-a'):
@@ -58,7 +54,7 @@ for idx in range(2, len(sys.argv)):
       print("Invalid exploration factor, must be a float")
   elif(sys.argv[idx]=='-x'):
     try:
-      RL.getQTable(sys.argv[idx+1])
+      RL.getWeights(sys.argv[idx+1])
     except:
       print("Couldn't locate csv file with prior experience, continuing with no experience")
 
@@ -70,8 +66,8 @@ if(
   print("Invalid or missing arguments. Usage:\n python3 agent.py -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)]")
   exit(0)
 
-# Play 10 episodes
-for episode in range(1000):
+# Play 100 episodes
+for episode in range(100):
   reward = 0
   total_reward = 0
   while not ale.game_over():
@@ -82,7 +78,6 @@ for episode in range(1000):
     screen = RL.convertEnv(screen_data)
     state = RL.getState(screen)
 
-    reward += RL.stateReward(state)
     a = RL.Q_learn(state, reward)
     if a is None:
       a = 0
@@ -92,4 +87,4 @@ for episode in range(1000):
   print('Episode %d ended with score: %d' % (episode, total_reward))
   ale.reset_game()
 
-RL.saveQTable('Q.csv')
+RL.saveWeights('weights.csv')

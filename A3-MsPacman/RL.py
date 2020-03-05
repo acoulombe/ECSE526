@@ -1,38 +1,36 @@
 import csv_util
 from collections import Counter
-from ale_py import ALEInterface
 import copy
 import math
 import random
 
-ale = None
-# Q-table of the agent
-Q = {}
+# Agent Parameters
 alpha = None
 gamma = None
 epsilon = None
+theta = [1, 1, 1, 1, 1]
 
-def getQTable(Qfile):
-    """Get the Qtable from the csv file storage
-
-    Parameters
-    --------
-        Qfile : str
-            name of csv to read Qtable from
-    """
-    global Q
-    Q = csv_util.read_csv(Qfile)
-
-def saveQTable(Qfile):
-    """Save the Qtable to a csv file for later use
+def getWeights(filename):
+    """Get the prior computed weights from the csv file storage
 
     Parameters
     --------
-        Qfile : str
-            name of csv to write Qtable to
+        filename : str
+            name of csv to read
     """
-    global Q
-    csv_util.write_csv(Qfile, Q)
+    global theta
+    theta = csv_util.read_csv(filename)
+
+def saveWeights(filename):
+    """Save the computed weights to a csv file for later use
+
+    Parameters
+    --------
+        filename : str
+            name of csv to write
+    """
+    global theta
+    csv_util.write_csv(filename, theta)
 
 def convertEnv(env):
     """Convert ALE screen from 1D array to 2D array
@@ -95,6 +93,7 @@ def getState(env):
     global clyde_pos
     global inky_pos
     global pacman_pos
+
     grid = copy.deepcopy(env_model)
     for i in range(14):
         for j in range(20):
@@ -229,205 +228,7 @@ def getState(env):
     grid[pinky_pos[0]][pinky_pos[1]] = 4 + pinky_pos[2]
     grid[clyde_pos[0]][clyde_pos[1]] = 4 + clyde_pos[2]
 
-    state = ''
-    close_food, food_dir, num_food = findFoodFeatures(grid)
-    state = f'{close_food},{food_dir}'
-    num_scared, N_risk, E_risk, S_risk, W_risk, flee = findGhostFeatures(grid)
-    state = f'{state},{num_scared},{N_risk},{E_risk},{S_risk},{W_risk},{flee}'
-    state = f'{state},{findWallFeatures(grid)}'
-
-    return state
-
-def findFoodFeatures(grid):
-    """Find the features related to food, namely distance to
-    the nearest food position from Ms. Pacman and how many remain
-
-    Parameters
-    --------
-        grid : list(list(int))
-            grid representation of the Atari screen
-    
-    Returns
-    --------
-        int
-            distance to closest food from Ms. Pacman
-        str
-            Cardinal direction to food
-        int
-            number of food pieces left 
-    """
-    global pacman_pos
-    
-    dist = float('Inf')
-    num_food = 0
-    food_dir = ''
-    for i in range(0, len(grid)):
-        for j in range(0, len(grid[0])):
-            if grid[i][j] == 1:
-                num_food += 1
-                dx = abs(pacman_pos[0]-i)
-                dy = abs(pacman_pos[1]-j)
-                delta = 0
-                if dx != 0 and dy != 0:
-                    delta = dx+dy-1
-                else:
-                    delta = dx+dy
-                if dist > delta:
-                    dist = delta
-                    food_dir = ''
-                    if((pacman_pos[0]-i) < 0):
-                        food_dir += 'S'
-                    elif((pacman_pos[0]-i) > 0):
-                        food_dir += 'N'
-                    if((pacman_pos[1]-j) < 0):
-                        food_dir += 'E'
-                    elif((pacman_pos[1]-j) > 0):
-                        food_dir += 'W'
-
-    return dist, food_dir, num_food
-
-def findGhostFeatures(grid):
-    """Find the features related to the Ghosts
-
-    Parameters
-    --------
-        grid : list(list(int))
-            grid representation of the Atari screen
-    
-    Returns
-    --------
-        int
-            Number of scared ghosts on the screen
-        int
-            Weight of ghosts within 2 steps of Ms. Pacman from the North
-        int
-            Weight of ghosts within 2 steps of Ms. Pacman from the East
-        int
-            Weight of ghosts within 2 steps of Ms. Pacman from the South
-        int
-            Weight of ghosts within 2 steps of Ms. Pacman from the West
-        bool
-            Boolean for feed Ms. Pacman or flee Ghosts mode
-    """
-    global prev_reward
-    global blinky_pos
-    global pinky_pos
-    global clyde_pos
-    global inky_pos
-    global pacman_pos
-    num_scared = 0
-    for i in range(0, len(grid)):
-        try:
-            j = grid[i].index(4)            # Corresponds to scared ghosts
-            num_scared += 1
-
-        except ValueError:
-            continue
-
-    weights = [
-        [0, 0, 1, 0, 0],
-        [0, 1, 2, 1, 0],
-        [1, 2, 10, 2, 1],
-        [0, 1, 2, 1, 0],
-        [0, 0, 1, 0, 0]
-    ]
-    N_risk = 0
-    E_risk = 0
-    S_risk = 0
-    W_risk = 0
-    for i in range(-2, 3):
-        for j in range(-2, 3):
-            try:
-                if(grid[pacman_pos[0]+i][pacman_pos[1]+j] == 4 or grid[pacman_pos[0]+i][pacman_pos[1]+j] == 5):
-                    if i < 0:
-                        N_risk = weights[i+2][j+2]
-                    elif i > 0:
-                        S_risk = weights[i+2][j+2]
-                    if j < 0:
-                        W_risk = weights[i+2][j+2]
-                    elif j > 0:
-                        E_risk = weights[i+2][j+2]
-                    if(i == 0 and j == 0):
-                        N_risk = weights[i+2][j+2]
-                        S_risk = weights[i+2][j+2]
-                        W_risk = weights[i+2][j+2]
-                        E_risk = weights[i+2][j+2]
-            except IndexError:
-                continue
-
-    flee_mode = False
-    if(
-        (
-            N_risk > 0 or
-            E_risk > 0 or
-            S_risk > 0 or
-            W_risk > 0
-        ) and
-        num_scared == 0
-    ):
-        flee_mode = True
-
-    return num_scared, N_risk, E_risk, S_risk, W_risk, flee_mode
-
-def findWallFeatures(grid):
-    """Find the directions of the wall next to pacman
-
-    Parameters
-    ---------
-        grid : list(list(int))
-            grid representation of the Atari screen
-    
-    Returns
-    --------
-        str
-            Cardinal directions of the walls next to pacman
-    """
-    Wall_dir = ''
-    try:
-        if(grid[pacman_pos[0]-1][pacman_pos[1]] == 6):
-            Wall_dir += 'N'
-    except IndexError:
-        Wall_dir += 'N'
-    try:
-        if(grid[pacman_pos[0]+1][pacman_pos[1]] == 6):
-            Wall_dir += 'S'
-    except IndexError:
-        Wall_dir += 'S'
-    try:
-        if(grid[pacman_pos[0]][pacman_pos[1]-1] == 6):
-            Wall_dir += 'W'
-    except IndexError:
-        Wall_dir += 'W'
-    try:
-        if(grid[pacman_pos[0]][pacman_pos[1]+1] == 6):
-            Wall_dir += 'E'
-    except IndexError:
-        Wall_dir += 'E'
-
-    return Wall_dir
-
-def stateReward(state):
-    """Punish the AI for bad behavior
-
-    Parameters
-    --------
-        state : str
-            current state of the game
-
-    Returns
-    --------
-        int
-            punishment for AI's bad behavior
-    """
-    features = state.split(',')
-    reward = 5/int(features[0])
-    reward += int(features[3])*-100
-    reward += int(features[4])*-100
-    reward += int(features[5])*-100
-    reward += int(features[6])*-100
-    if(features[7] == 'False'):
-        reward += 10
-    return reward
+    return grid
 
 # Q-learning constants
 prev_state = None
@@ -439,12 +240,10 @@ def Q_learn(state, reward):
 
     Parameters
     --------
-        state : str
-            current state of the game
+        state : list(list(int))
+            2D array representing the state of the game
         reward : int
             received reward
-        action : int
-            action to perform
     
     Returns
     -------
@@ -456,42 +255,234 @@ def Q_learn(state, reward):
     global prev_state
     global alpha
     global gamma
+    global theta
+    global last_moves
 
-    if ale.game_over():
-        Q.setdefault(prev_state, 0).append(reward)
+    if isDead():
+        reward -= 100
+
     if prev_state is not None:
-        s_a = f'{prev_state},{prev_action}'
-        Q.setdefault(s_a, 0)                    # If state never encountered before, init to zero
-        Q[s_a] = Q[s_a] + alpha*(reward + gamma*maxQ(state) - Q[s_a])
+        Q = Q_val(prev_state, prev_action)
+
+        # Update last moves
+        try: 
+            if(prev_action == 4 and prev_state[pacman_pos[0]][(pacman_pos[1]-1)%(len(prev_state[0])+1)] != 6):    # West
+                last_moves = [
+                    [0] + last_moves[0][:-1],
+                    [0] + last_moves[1][:-1],
+                    [0] + last_moves[2][:-1]
+                ]
+            elif(prev_action == 2 and prev_state[(pacman_pos[0]-1)%(len(prev_state[0])+1)][pacman_pos[1]] != 6):  # North
+                last_moves = [
+                    [0, 0, 0],
+                    last_moves[0],
+                    last_moves[1]
+                ] 
+            elif(prev_action == 3 and prev_state[pacman_pos[0]][pacman_pos[1]+1] != 6):  # East
+                last_moves = [
+                    last_moves[0][1:] + [0],
+                    last_moves[1][1:] + [0],
+                    last_moves[2][1:] + [0]
+                ]
+            elif(prev_action == 5 and prev_state[pacman_pos[0]+1][pacman_pos[1]] != 6):  # South
+                last_moves = [
+                    last_moves[1],
+                    last_moves[2],
+                    [0, 0, 0]
+                ] 
+            else:
+                prev_state[pacman_pos[0]][pacman_pos[1]] = 3
+        except IndexError:
+            # Going through tunnel is a legal prev_action
+            if(pacman_pos[1] == 0 and prev_action == 4):
+                last_moves = [
+                    [0] + last_moves[0][:-1],
+                    [0] + last_moves[1][:-1],
+                    [0] + last_moves[2][:-1]
+                ]
+            elif(pacman_pos[1] == len(prev_state[0])-1 and prev_action == 3):
+                last_moves = [
+                    last_moves[0][1:] + [0],
+                    last_moves[1][1:] + [0],
+                    last_moves[2][1:] + [0]
+                ]
+        last_moves[1][1] += 1 
+
+        pi, Qmax = maxQ(state)
+        food_dist, num_food = findFoodFeatures(state)
+        scared_dist, active_dist = findGhostFeatures()
+        oscillation = findOscillation(last_moves)
+
+        if(food_dist != 0):
+            theta[0] = theta[0] + alpha*(reward + gamma*Qmax - Q)/food_dist
+        else:
+            theta[0] = theta[0] + alpha*(reward + gamma*Qmax - Q)
+        
+        if(scared_dist != 0):
+            theta[1] = theta[1] + alpha*(reward + gamma*Qmax - Q)/scared_dist
+        else:
+            theta[1] = theta[1] + alpha*(reward + gamma*Qmax - Q)
+        if(active_dist != 0):
+            theta[2] = theta[2] + alpha*(reward + gamma*Qmax - Q)/active_dist
+        else:
+            theta[2] = theta[2] + alpha*(reward + gamma*Qmax - Q)
+        if(oscillation != 0):
+            theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)/oscillation
+        else:
+            theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)
+        if(num_food != 0):
+            theta[4] = theta[4] + alpha*(reward + gamma*Qmax - Q)/num_food
+        else:
+            theta[4] = theta[4] + alpha*(reward + gamma*Qmax - Q)
+
     prev_state = state
     prev_action = explore(state)
     prev_reward = reward
     return prev_action
+
+def Q_val(state, action):
+    """Compute the expected Q value of a state action pair
+
+    Parameters
+    --------
+        state : list(list(int))
+            2D array representing the state of the game
+    
+    Returns
+    --------
+        float
+            Q value
+    """
+    global blinky_pos
+    global pinky_pos
+    global clyde_pos
+    global inky_pos
+    global pacman_pos
+    global last_moves
+
+    next_state = copy.deepcopy(state)
+    past_moves = copy.deepcopy(last_moves)
+    next_state[pacman_pos[0]][pacman_pos[1]] = 0
+    tmp = pacman_pos
+    try: 
+        if(action == 4 and next_state[pacman_pos[0]][(pacman_pos[1]-1)%(len(next_state[0])+1)] != 6):    # West
+            next_state[pacman_pos[0]][pacman_pos[1]-1] = 3
+            pacman_pos = [pacman_pos[0], pacman_pos[1]-1]
+            past_moves = [
+                [0] + last_moves[0][:-1],
+                [0] + last_moves[1][:-1],
+                [0] + last_moves[2][:-1]
+            ]
+        elif(action == 2 and next_state[(pacman_pos[0]-1)%(len(next_state[0])+1)][pacman_pos[1]] != 6):  # North
+            next_state[pacman_pos[0]-1][pacman_pos[1]] = 3
+            pacman_pos = [pacman_pos[0]-1, pacman_pos[1]]
+            past_moves = [
+                [0, 0, 0],
+                last_moves[0],
+                last_moves[1]
+            ] 
+        elif(action == 3 and next_state[pacman_pos[0]][pacman_pos[1]+1] != 6):  # East
+            next_state[pacman_pos[0]][pacman_pos[1]+1] = 3
+            pacman_pos = [pacman_pos[0], pacman_pos[1]+1]
+            past_moves = [
+                last_moves[0][1:] + [0],
+                last_moves[1][1:] + [0],
+                last_moves[2][1:] + [0]
+            ]
+        elif(action == 5 and next_state[pacman_pos[0]+1][pacman_pos[1]] != 6):  # South
+            next_state[pacman_pos[0]+1][pacman_pos[1]] = 3
+            pacman_pos = [pacman_pos[0]+1, pacman_pos[1]]
+            past_moves = [
+                last_moves[1],
+                last_moves[2],
+                [0, 0, 0]
+            ] 
+        else:
+            next_state[pacman_pos[0]][pacman_pos[1]] = 3
+    except IndexError:
+        # Going through tunnel is a legal action
+        if(pacman_pos[1] == 0 and action == 4):
+            next_state[pacman_pos[0]][len(next_state[0])-1] = 3
+            past_moves = [
+                [0] + last_moves[0][:-1],
+                [0] + last_moves[1][:-1],
+                [0] + last_moves[2][:-1]
+            ]
+        elif(pacman_pos[1] == len(next_state[0])-1 and action == 3):
+            next_state[pacman_pos[0]+1][0] = 3
+            past_moves = [
+                last_moves[0][1:] + [0],
+                last_moves[1][1:] + [0],
+                last_moves[2][1:] + [0]
+            ]
+        else:
+            next_state[pacman_pos[0]][pacman_pos[1]] = 3
+    
+    past_moves[1][1] += 1
+
+    dist_food, num_food = findFoodFeatures(next_state)
+    scared_dist, active_dist = findGhostFeatures()
+    oscillation = findOscillation(past_moves)
+    pacman_pos = tmp
+
+    Q = 0
+    try:
+        Q += theta[0]/dist_food
+    except ZeroDivisionError:
+        Q += theta[0]
+    try:
+        Q += theta[1]/scared_dist
+    except ZeroDivisionError:
+        Q += theta[1]
+    try:
+        Q += theta[2]/active_dist
+    except ZeroDivisionError:
+        Q += theta[2]
+    try:
+        Q += theta[3]/oscillation
+    except ZeroDivisionError:
+        Q += theta[3]
+    try:
+        Q += theta[4]/num_food
+    except ZeroDivisionError:
+        Q += theta[4]
+
+    return Q
 
 def maxQ(state):
     """Find maximum Q value from Q table when performing actions in state
 
     Parameters
     --------
-        state : str
-            current state of the game in string form
+        state : list(list(int))
+            2D array representing the state of the game
     
     Returns
     --------
         int
+            action that has highest Q value
+        float
             max Q value attainable
     """
-    global ale
-    actions = ale.getMinimalActionSet()
-    actions = actions.tolist()
-    max_val = -float('Inf')
+    actions = [4, 2, 3, 5]  # [W, N, E, S]
+    Qmax = -float('Inf')
+    pi = 0
     for a in actions:
-        s_a = f'{state},{a}'
-        Q.setdefault(s_a, 0)
-        val = Q[s_a]
-        if(val > max_val):
-            max_val = val
-    return max_val
+        Q = Q_val(state, a)
+        if(Q > Qmax):
+            try:
+                if(
+                    (a == 4 and state[pacman_pos[0]][pacman_pos[1]-1] == 6) or  # West
+                    (a == 2 and state[pacman_pos[0]-1][pacman_pos[1]] == 6) or  # North
+                    (a == 3 and state[pacman_pos[0]][pacman_pos[1]+1] == 6) or  # East
+                    (a == 5 and state[pacman_pos[0]+1][pacman_pos[1]] == 6)     # South
+                ):
+                    continue    # Reject Movement in walls
+                pi = a
+                Qmax = Q
+            except IndexError:
+                continue
+    return pi, Qmax
 
 def explore(state):
     """Function to control the exploration of the agent
@@ -499,31 +490,242 @@ def explore(state):
     
     Parameters
     --------
-        state : str
-            current state of the game in string form
+        state : list(list(int))
+            2D array representing the state of the game
     
     Returns
     --------
         int
             action to be performed by the agent
     """
-    global ale
     global epsilon
 
-    actions = ale.getMinimalActionSet()
-    actions = actions.tolist()
-    max_val = -float('Inf')
-    best_a = 0
+    actions = [4, 2, 3, 5]  # [W, N, E, S]
     # Randomly Select move
     if(random.random() < epsilon):
-        return random.randint(0,len(actions)-1)
+        return actions[random.randint(0,len(actions)-1)]
     # Select best move
     else:
-        for a in actions:
-            s_a = f'{state},{a}'
-            Q.setdefault(s_a, 0)
-            val = Q[s_a]
-            if(val > max_val):
-                max_val = val
-                best_a = a
-        return best_a
+        pi, Qmax = maxQ(state)
+        return pi
+
+def findFoodFeatures(grid):
+    """Find the features distance to the nearest
+    food position from Ms. Pacman
+
+    Parameters
+    --------
+        grid : list(list(int))
+            grid representation of the Atari screen
+    
+    Returns
+    --------
+        int
+            sum of distances to all food from Ms. Pacman
+        int
+            number of food dot on the grid
+    """
+    global pacman_pos
+    
+    # dist = float("Inf")
+    dist = 0
+    num_food = 0
+    for i in range(0, len(grid)):
+        for j in range(0, len(grid[0])):
+            if grid[i][j] == 1:
+                num_food +=1
+                dx = abs(pacman_pos[0]-i)
+                dy = abs(pacman_pos[1]-j)
+                delta = 0
+                if dx != 0 and dy != 0:
+                    delta = dx+dy-1
+                else:
+                    delta = dx+dy
+                # if(delta < dist):
+                #     dist = delta
+                dist += delta
+    return dist, num_food
+
+def findGhostFeatures():
+    """Find the features related to the Ghosts, namely the distance
+    to the closest scared ghost and active ghost
+
+    Returns
+    --------
+        int
+            Sum of distance to all scared ghost
+        int
+            Sum of distance to all active ghost
+    """
+    global blinky_pos
+    global pinky_pos
+    global clyde_pos
+    global inky_pos
+    global pacman_pos
+   
+    scared_dist = float('Inf')
+    active_dist = float('Inf')
+    
+    dx = abs(pacman_pos[0]-blinky_pos[0])
+    dy = abs(pacman_pos[1]-blinky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(blinky_pos[2] == 1):
+        # if(active_dist == float('Inf')):
+        #     active_dist = 0
+        # active_dist += delta
+        if(active_dist > delta):
+            active_dist = delta
+    elif(blinky_pos[2] == 0):
+        # if(scared_dist == float('Inf')):
+        #     scared_dist = 0
+        # scared_dist += delta
+        if(scared_dist > delta):
+            scared_dist = delta
+
+    dx = abs(pacman_pos[0]-pinky_pos[0])
+    dy = abs(pacman_pos[1]-pinky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(pinky_pos[2] == 1):
+        # if(active_dist == float('Inf')):
+        #     active_dist = 0
+        # active_dist += delta
+        if(active_dist > delta):
+            active_dist = delta
+    elif(pinky_pos[2] == 0):
+        # if(scared_dist == float('Inf')):
+        #     scared_dist = 0
+        # scared_dist += delta
+        if(scared_dist > delta):
+            scared_dist = delta
+
+    dx = abs(pacman_pos[0]-inky_pos[0])
+    dy = abs(pacman_pos[1]-inky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(inky_pos[2] == 1):
+        # if(active_dist == float('Inf')):
+        #     active_dist = 0
+        # active_dist += delta
+        if(active_dist > delta):
+            active_dist = delta
+    elif(inky_pos[2] == 0):
+        # if(scared_dist == float('Inf')):
+        #     scared_dist = 0
+        # scared_dist += delta
+        if(scared_dist > delta):
+            scared_dist = delta
+
+    dx = abs(pacman_pos[0]-clyde_pos[0])
+    dy = abs(pacman_pos[1]-clyde_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(clyde_pos[2] == 1):
+        # if(active_dist == float('Inf')):
+        #     active_dist = 0
+        # active_dist += delta
+        if(active_dist > delta):
+            active_dist = delta
+    elif(clyde_pos[2] == 0):
+        # if(scared_dist == float('Inf')):
+        #     scared_dist = 0
+        # scared_dist += delta
+        if(scared_dist > delta):
+            scared_dist = delta
+
+    return scared_dist, active_dist
+
+def isDead():
+    """Discover whether Ms. Pacman will is equivalently dead to give the
+    reward before the game
+
+    Returns
+    -------
+        bool
+            Is Ms. Pacman equivalently dead
+    """
+    global blinky_pos
+    global pinky_pos
+    global clyde_pos
+    global inky_pos
+    global pacman_pos
+    
+    dx = abs(pacman_pos[0]-blinky_pos[0])
+    dy = abs(pacman_pos[1]-blinky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(delta < 2):
+        return True
+
+    dx = abs(pacman_pos[0]-pinky_pos[0])
+    dy = abs(pacman_pos[1]-pinky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(delta < 2):
+        return True
+
+    dx = abs(pacman_pos[0]-inky_pos[0])
+    dy = abs(pacman_pos[1]-inky_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(delta < 2):
+        return True
+
+    dx = abs(pacman_pos[0]-clyde_pos[0])
+    dy = abs(pacman_pos[1]-clyde_pos[1])
+    delta = 0
+    if dx != 0 and dy != 0:
+        delta = dx+dy-1
+    else:
+        delta = dx+dy
+    if(delta < 2):
+        return True
+
+    return False
+
+last_moves = [
+    [0, 0, 0],
+    [0, 1, 0],
+    [0, 0, 0]
+]
+
+def findOscillation(past_moves):
+    """Finds the oscillatory behavior of Ms. Pacman
+
+    Parameters
+    --------
+        past_moves : list(list(int))
+            2D array representing the short-term move memory of Ms. Pacman
+
+    Returns:
+    --------
+        int
+            oscillation factor of Ms. Pacman
+    """
+    oscillations = 0
+    for i in range(0, len(past_moves)):
+        for j in range(0, len(past_moves[0])):
+            oscillations += math.pow(past_moves[i][j], 2)
+    return oscillations
