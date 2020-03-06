@@ -6,11 +6,8 @@ import numpy as np
 import RL
 
 if len(sys.argv) < 2:
-  print('Usage: %s rom_file' % sys.argv[0])
+  print('Usage: %s rom_file -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)] -s [seed(optional)]' % sys.argv[0])
   sys.exit()
-
-ale = ALEInterface()
-seed = 0
 
 # Set Agent Parameters
 for idx in range(2, len(sys.argv)):
@@ -45,8 +42,11 @@ if(
   RL.gamma is None or
   RL.epsilon is None
 ):
-  print("Invalid or missing arguments. Usage:\n python3 agent.py -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)]")
+  print("Invalid or missing arguments. Usage:\npython3 agent.py rom_file -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)] -s [seed(optional)]")
   exit(0)
+
+ale = ALEInterface()
+seed = 0
 
 # Get & Set the desired settings
 ale.setInt(b'random_seed', seed)
