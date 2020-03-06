@@ -306,7 +306,8 @@ def Q_learn(state, reward):
                     last_moves[1][1:] + [0],
                     last_moves[2][1:] + [0]
                 ]
-        last_moves[1][1] += 1 
+        
+        last_moves[1][1] += 1
 
         pi, Qmax = maxQ(state)
         food_dist, num_food = findFoodFeatures(state)
@@ -316,8 +317,7 @@ def Q_learn(state, reward):
         if(food_dist != 0):
             theta[0] = theta[0] + alpha*(reward + gamma*Qmax - Q)/food_dist
         else:
-            theta[0] = theta[0] + alpha*(reward + gamma*Qmax - Q)
-        
+            theta[0] = theta[0] + alpha*(reward + gamma*Qmax - Q) 
         if(scared_dist != 0):
             theta[1] = theta[1] + alpha*(reward + gamma*Qmax - Q)/scared_dist
         else:
@@ -536,11 +536,7 @@ def findFoodFeatures(grid):
                 num_food +=1
                 dx = abs(pacman_pos[0]-i)
                 dy = abs(pacman_pos[1]-j)
-                delta = 0
-                if dx != 0 and dy != 0:
-                    delta = dx+dy-1
-                else:
-                    delta = dx+dy
+                delta = dx+dy
                 # if(delta < dist):
                 #     dist = delta
                 dist += delta
@@ -670,7 +666,7 @@ def isDead():
         delta = dx+dy-1
     else:
         delta = dx+dy
-    if(delta < 2):
+    if(delta < 2 and blinky_pos[2] == 1):
         return True
 
     dx = abs(pacman_pos[0]-pinky_pos[0])
@@ -680,7 +676,7 @@ def isDead():
         delta = dx+dy-1
     else:
         delta = dx+dy
-    if(delta < 2):
+    if(delta < 2 == pinky_pos[2] == 1):
         return True
 
     dx = abs(pacman_pos[0]-inky_pos[0])
@@ -690,7 +686,7 @@ def isDead():
         delta = dx+dy-1
     else:
         delta = dx+dy
-    if(delta < 2):
+    if(delta < 2 == inky_pos[2] == 1):
         return True
 
     dx = abs(pacman_pos[0]-clyde_pos[0])
@@ -700,7 +696,7 @@ def isDead():
         delta = dx+dy-1
     else:
         delta = dx+dy
-    if(delta < 2):
+    if(delta < 2 and clyde_pos[2] == 1):
         return True
 
     return False
@@ -727,5 +723,5 @@ def findOscillation(past_moves):
     oscillations = 0
     for i in range(0, len(past_moves)):
         for j in range(0, len(past_moves[0])):
-            oscillations += math.pow(past_moves[i][j], 2)
+            oscillations += math.pow(past_moves[i][j], 0.5)
     return oscillations

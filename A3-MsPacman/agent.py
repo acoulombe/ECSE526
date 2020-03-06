@@ -66,8 +66,8 @@ if(
   print("Invalid or missing arguments. Usage:\n python3 agent.py -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)]")
   exit(0)
 
-# Play 100 episodes
-for episode in range(100):
+# Play 60 episodes
+for episode in range(60):
   reward = 0
   total_reward = 0
   while not ale.game_over():
