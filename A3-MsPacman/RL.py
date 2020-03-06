@@ -19,7 +19,7 @@ def getWeights(filename):
             name of csv to read
     """
     global theta
-    theta = csv_util.read_csv(filename)
+    theta = csv_util.read_csv(filename)[0]
 
 def saveWeights(filename):
     """Save the computed weights to a csv file for later use
