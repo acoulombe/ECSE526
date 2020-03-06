@@ -10,30 +10,7 @@ if len(sys.argv) < 2:
   sys.exit()
 
 ale = ALEInterface()
-
-# Get & Set the desired settings
-ale.setInt(b'random_seed', 0)
-ale.setInt(b'frame_skip', 5)
-
-# Set USE_SDL to true to display the screen. ALE must be compilied
-# with SDL enabled for this to work. On OSX, pygame init is used to
-# proxy-call SDL_main.
-USE_SDL = True
-if USE_SDL:
-  if sys.platform == 'darwin':
-    import pygame
-    pygame.init()
-    ale.setBool('sound', False) # Sound doesn't work on OSX
-  elif sys.platform.startswith('linux'):
-    ale.setBool('sound', True)
-  ale.setBool('display_screen', True)
-
-# Load the ROM file
-rom_file = str.encode(sys.argv[1])
-ale.loadROM(rom_file)
-
-# Get the list of minimal actions
-legal_actions = ale.getMinimalActionSet()
+seed = 0
 
 # Set Agent Parameters
 for idx in range(2, len(sys.argv)):
@@ -57,6 +34,11 @@ for idx in range(2, len(sys.argv)):
       RL.getWeights(sys.argv[idx+1])
     except:
       print("Couldn't locate csv file with prior experience, continuing with no experience")
+  elif(sys.argv[idx]=='-s'):
+    try:
+        seed = int(sys.argv[idx+1])
+    except:
+      print("Invalid seed, must be an int")
 
 if(
   RL.alpha is None or
@@ -66,7 +48,31 @@ if(
   print("Invalid or missing arguments. Usage:\n python3 agent.py -a [learning rate] -g [discount rate] -e [exploration factor] -x [prior experience file (csv)(optional)]")
   exit(0)
 
-# Play 60 episodes
+# Get & Set the desired settings
+ale.setInt(b'random_seed', seed)
+ale.setInt(b'frame_skip', 5)
+
+# Set USE_SDL to true to display the screen. ALE must be compilied
+# with SDL enabled for this to work. On OSX, pygame init is used to
+# proxy-call SDL_main.
+USE_SDL = True
+if USE_SDL:
+  if sys.platform == 'darwin':
+    import pygame
+    pygame.init()
+    ale.setBool('sound', False) # Sound doesn't work on OSX
+  elif sys.platform.startswith('linux'):
+    ale.setBool('sound', True)
+  ale.setBool('display_screen', True)
+
+# Load the ROM file
+rom_file = str.encode(sys.argv[1])
+ale.loadROM(rom_file)
+
+# Get the list of minimal actions
+legal_actions = ale.getMinimalActionSet()
+
+# Play N episodes
 for episode in range(60):
   reward = 0
   total_reward = 0
