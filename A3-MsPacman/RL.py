@@ -326,10 +326,10 @@ def Q_learn(state, reward):
             theta[2] = theta[2] + alpha*(reward + gamma*Qmax - Q)/active_dist
         else:
             theta[2] = theta[2] + alpha*(reward + gamma*Qmax - Q)
-        if(oscillation != 0):
-            theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)/oscillation
-        else:
-            theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)
+        # if(oscillation != 0):
+        #     theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)/oscillation
+        # else:
+        #     theta[3] = theta[3] + alpha*(reward + gamma*Qmax - Q)
         if(num_food != 0):
             theta[4] = theta[4] + alpha*(reward + gamma*Qmax - Q)/num_food
         else:
@@ -438,10 +438,10 @@ def Q_val(state, action):
         Q += theta[2]/active_dist
     except ZeroDivisionError:
         Q += theta[2]
-    try:
-        Q += theta[3]/oscillation
-    except ZeroDivisionError:
-        Q += theta[3]
+    # try:
+    #     Q += theta[3]/oscillation
+    # except ZeroDivisionError:
+    #     Q += theta[3]
     try:
         Q += theta[4]/num_food
     except ZeroDivisionError:
